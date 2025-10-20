@@ -14,7 +14,6 @@ current_lunar = dict()
 now = datetime.now()
 
 current_date = format_date(now, format='full', locale='fr_FR')
-current_date = formatDate("%A %d %B %Y", locale, datetime)
 content = req("https://www.lunopia.com/calendrier-lunaire", requests)
 
 data = BeautifulSoup(content, 'html.parser')
