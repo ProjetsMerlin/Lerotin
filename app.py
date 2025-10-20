@@ -3,12 +3,17 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 from flask import Flask, render_template
+from babel.dates import format_date
+from datetime import datetime
 
 ## Lerotin
 from packages.functions import formatDate, req
 
 current_lunar = dict()
-locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+
+now = datetime.now()
+
+current_date = format_date(now, format='full', locale='fr_FR')
 current_date = formatDate("%A %d %B %Y", locale, datetime)
 content = req("https://www.lunopia.com/calendrier-lunaire", requests)
 
