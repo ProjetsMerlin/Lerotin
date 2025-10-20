@@ -8,6 +8,7 @@ from flask import Flask, render_template
 from packages.functions import formatDate, req
 
 current_lunar = dict()
+locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
 current_date = formatDate("%A %d %B %Y", locale, datetime)
 content = req("https://www.lunopia.com/calendrier-lunaire", requests)
 
