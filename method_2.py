@@ -1,49 +1,37 @@
 import datetime
 import ephem
 
-def calculPhaseLunaire_m2(date=None):
+def method_2(date=None):
     if date is None:
-        date = datetime.datetime.now()
+        date = datetime.datetime.now(datetime.timezone.utc)
 
-    local = date.astimezone()
-    date_utc = local.astimezone(datetime.timezone.utc)
+    date_ephem = ephem.Date(date)
+    prev_new_moon = ephem.previous_new_moon(date_ephem)
+    age_days = float(date_ephem - prev_new_moon)
 
-    observer = ephem.Observer()
-    observer.lon = '4.35'  
-    observer.lat = '50.85'  
-    observer.date = date_utc
-
-    moon = ephem.Moon(observer)
-    phase = moon.moon_phase  
-    phase_norm = phase
-    
-    if phase_norm < 0.03 or phase_norm > 0.97:
-        libelle = "Nouvelle Lune 🌑"
-    elif phase_norm < 0.22:
-        libelle = "Premier Croissant 🌒"
-    elif phase_norm < 0.28:
-        libelle = "Premier Quartier 🌓"
-    elif phase_norm < 0.47:
-        libelle = "Gibbeuse croissante 🌔"
-    elif phase_norm < 0.53:
-        libelle = "Pleine Lune 🌕"
-    elif phase_norm < 0.72:
-        libelle = "Gibbeuse décroissante 🌖"
-    elif phase_norm < 0.78:
-        libelle = "Dernier Quartier 🌗"
+    if age_days < 1.84566:
+        label, icon = "Nouvelle Lune", "🌑"
+    elif age_days < 5.536:
+        label, icon = "Premier Croissant", "🌒"
+    elif age_days < 9.228:
+        label, icon = "Premier Quartier", "🌓"
+    elif age_days < 12.920:
+        label, icon = "Gibbeuse croissante", "🌔"
+    elif age_days < 16.611:
+        label, icon = "Pleine Lune", "🌕"
+    elif age_days < 20.302:
+        label, icon = "Gibbeuse décroissante", "🌖"
+    elif age_days < 23.993:
+        label, icon = "Dernier Quartier", "🌗"
+    elif age_days < 27.684:
+        label, icon = "Dernier Croissant", "🌘"
     else:
-        libelle = "Dernier Croissant 🌘"
+        label, icon = "Nouvelle Lune", "🌑"
 
     return {
-        "phase": libelle,
-        "phase_value": phase_norm,
-        "date_used": date_utc.strftime("%Y/%m/%d")
+        "label": label,
+        "icon": icon,
+        "day": date.strftime("%d/%m/%Y"),
     }
 
-def displayResult():
-    res = calculPhaseLunaire_m2()
-    date = datetime.datetime.now()
-    aujourdhui = date.strftime("%Y/%m/%d")
-    return f"Phase lunaire du {aujourdhui} : {res['phase']} (valeur={res['phase_value']:.3f})"
-
-print(displayResult())
+print(method_2())
